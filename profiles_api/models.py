@@ -1,7 +1,31 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser 
 from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import BaseUserManager
 
+#User Profile Manger for Custom Model
+class UserProfileManger(BaseUserManager):
+
+    def create_user(self, email, name, password=None):
+        """Create new user profile"""
+        if not email:
+            raise ValueError('User must have a email address')
+        email = self.normalize_email(email) #email normalize from case sensitive
+        user = self.model(email=email, name=name) #user profile created
+
+        user.set_password(password)
+        user.save(using=self._db)
+        return user # Return newly created user
+
+    def create_superuser(self, email, name, password):
+        """Create and save new super user"""
+        user = self.create_user(email, name, password)
+
+        user.is_superuser = True
+        user.is_staff = True
+        user.save(using=self._db)
+
+        return user
 
 
 
