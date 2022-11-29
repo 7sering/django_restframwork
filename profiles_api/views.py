@@ -4,6 +4,9 @@ from rest_framework.response import Response  # For Response
 from rest_framework import status
 from profiles_api import serializers
 
+# FOR VIEW SETS
+from rest_framework import viewsets
+
 
 class HelloApiView(APIView):
     """Test API View"""
@@ -12,13 +15,11 @@ class HelloApiView(APIView):
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
-           return YOUR_SERIALIZER_1
+            return YOUR_SERIALIZER_1
         elif self.request.method == 'GET':
-           return YOUR_SERIALIZER_2
+            return YOUR_SERIALIZER_2
         else:
             return YOUR_DEFAULT_SERIALIZER
-
-
 
     def get(self, request, format=None):
         """Retrun a list of API View Features"""
@@ -30,11 +31,10 @@ class HelloApiView(APIView):
         ]
 
         return Response({'message': 'Hello', 'an_apiview': an_apiview})
-    
 
     def post(self, request):
         """Create a hello message with our name"""
-        
+
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
@@ -47,7 +47,6 @@ class HelloApiView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-
     def put(self, request, pk=None):
         """Handle updating of an object"""
         return Response({'method': 'PUT'})
@@ -59,3 +58,18 @@ class HelloApiView(APIView):
     def delete(self, request, pk=None):
         """Delete Object"""
         return Response({'method': 'DELETE'})
+
+
+########################## ViewSet API #####################
+
+class HelloViewSet(viewsets.ViewSet):
+    """ Test API View """
+
+    def list(self, request):
+        """Return Hello Message"""
+        a_viewset = [
+            'Use Actions (list, create, retrieve, update, partial_update)',
+            'Automatically maps to URLs using routers',
+            'Provides more functionality with less code',
+        ]
+        return Response({'message': 'Hello!', 'a_viewset': a_viewset})
