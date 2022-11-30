@@ -64,7 +64,15 @@ class HelloApiView(APIView):
 
 class HelloViewSet(viewsets.ViewSet):
     """ Test API View """
-    serializer_class = serializers.HelloSerializer()
+    serializer_class = serializers.HelloSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return YOUR_SERIALIZER_1
+        elif self.request.method == 'GET':
+            return YOUR_SERIALIZER_2
+        else:
+            return YOUR_DEFAULT_SERIALIZER
 
     def list(self, request):
         """Return Hello Message"""
