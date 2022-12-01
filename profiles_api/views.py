@@ -1,10 +1,12 @@
 from rest_framework.views import APIView  # API VIEW
 from rest_framework.response import Response  # For Response
+from rest_framework.authentication import TokenAuthentication  # Token Authentication
 
 from rest_framework import status
-from profiles_api import serializers
 
+from profiles_api import serializers
 from profiles_api import models
+from profiles_api import permission
 
 # API View
 from rest_framework import viewsets
@@ -117,8 +119,11 @@ class HelloViewSet(viewsets.ViewSet):
 
 ########################## Modal ViewSet API #####################
 
+
 class UserProfileViewSet(viewsets.ModelViewSet):
     """ Handle Creating and Updating Profiles """
 
     serializer_class = serializers.UserProfileSerializer
     queryset = models.UserProfile.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permission.UpdateOwnProfile,)

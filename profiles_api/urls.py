@@ -7,7 +7,7 @@ from profiles_api import views
 router = DefaultRouter()
 router.register('hello-viewset', views.HelloViewSet, base_name='hello-viewset')
 
-#Modal View Set no need to call base_name
+#?Modal View Set no need to call base_name
 router.register('profile', views.UserProfileViewSet)
 
 # ? Regular Urls
