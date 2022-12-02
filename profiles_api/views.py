@@ -128,5 +128,5 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = models.UserProfile.objects.all()
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permission.UpdateOwnProfile,)
-    filter_backends =(filter.SearchFilter,)
+    filter_backends =(filters.SearchFilter,)
     search_fields =('name', 'email', )
