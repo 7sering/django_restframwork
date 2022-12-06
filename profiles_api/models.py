@@ -1,21 +1,25 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser 
+from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
+from django.conf import settings
 
-#User Profile Manger for Custom Model
+# User Profile Manger for Custom Model
+
+
 class UserProfileManger(BaseUserManager):
 
     def create_user(self, email, name, password=None):
         """Create new user profile"""
         if not email:
             raise ValueError('User must have a email address')
-        email = self.normalize_email(email) #email normalize from case sensitive
-        user = self.model(email=email, name=name) #user profile created
+        # email normalize from case sensitive
+        email = self.normalize_email(email)
+        user = self.model(email=email, name=name)  # user profile created
 
         user.set_password(password)
         user.save(using=self._db)
-        return user # Return newly created user
+        return user  # Return newly created user
 
     def create_superuser(self, email, name, password):
         """Create and save new super user"""
@@ -28,8 +32,7 @@ class UserProfileManger(BaseUserManager):
         return user
 
 
-
-# CUSTOM USER MODEL IN DJANGO WITH EMAIL AUTHENTICATION 
+# CUSTOM USER MODEL IN DJANGO WITH EMAIL AUTHENTICATION
 class UserProfile(AbstractBaseUser, PermissionsMixin):
     """Database model for user in system"""
     email = models.EmailField(max_length=255, unique=True)
@@ -37,7 +40,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
-    #User Profile Manger
+    # User Profile Manger
     objects = UserProfileManger()
 
     USERNAME_FIELD = 'email'
@@ -54,4 +57,17 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         """Return string representation of our user"""
         return self.email
+
+
+###### -------------Profile Feed Modal--------#######
+
+class ProfileFeedItem(models.Model):
+    """ Profile Status Update """
+    user_profile = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=CASCADE)
+    status_text = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.status_text
     
